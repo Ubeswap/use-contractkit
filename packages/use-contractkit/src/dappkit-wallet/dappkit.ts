@@ -27,7 +27,7 @@ const localStorageKey = 'use-contractkit/dappkit';
 // and the url hash state is not respected (Note this implementation
 // of dappkit doesn't use URL hashes to always force the newtab experience).
 if (typeof window !== 'undefined') {
-  const params = new URL(window.location.href).searchParams;
+  const params = new URL(window.location.href.replace('/#', '')).searchParams;
   if (params.get('type') && params.get('requestId')) {
     localStorage.setItem(localStorageKey, window.location.href);
     window.close();

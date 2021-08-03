@@ -2,11 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import Loader from 'react-loader-spinner';
 
 import { AddCeloNetworkButton } from '../components/AddCeloNetworkButton';
-import {
-  MetaMaskConnector,
-  UnsupportedChainIdError,
-  ValoraConnector,
-} from '../connectors';
+import { UnsupportedChainIdError, ValoraConnector } from '../connectors';
 import { useInternalContractKit } from '../use-contractkit';
 import { ConnectorProps } from '.';
 
