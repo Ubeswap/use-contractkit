@@ -26,17 +26,26 @@ const localStorageKey = 'use-contractkit/dappkit';
 // hack to get around deeplinking issue where new tabs are opened
 // and the url hash state is not respected (Note this implementation
 // of dappkit doesn't use URL hashes to always force the newtab experience).
-if (typeof window !== 'undefined') {
-  const params = new URL(window.location.href.replace('/#', '')).searchParams;
-  if (params.get('type') && params.get('requestId')) {
-    localStorage.setItem(localStorageKey, window.location.href);
-    window.close();
+const checkUrlValora = (onTrue?: () => any) => {
+  if (typeof window !== 'undefined') {
+    const nonHashUrl = window.location.href.replace('/#', '');
+    const params = new URL(nonHashUrl).searchParams;
+    if (params.get('type') && params.get('requestId')) {
+      localStorage.setItem(localStorageKey, nonHashUrl);
+      onTrue && onTrue();
+    }
   }
-}
+};
+
+checkUrlValora(window.close);
 
 async function waitForResponse() {
   for (;;) {
-    const value = localStorage.getItem(localStorageKey);
+    let value = localStorage.getItem(localStorageKey);
+    if (!value) {
+      checkUrlValora();
+      value = localStorage.getItem(localStorageKey);
+    }
     if (value) {
       localStorage.removeItem(localStorageKey);
       return value;
