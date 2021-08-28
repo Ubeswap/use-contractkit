@@ -1,6 +1,6 @@
 {
   "name": "@poofcash/use-contractkit",
-  "version": "1.0.0-poof.11",
+  "version": "1.0.0-poof.12",
   "private": false,
   "scripts": {
     "build": "tsc -b && yarn run build-styles",
