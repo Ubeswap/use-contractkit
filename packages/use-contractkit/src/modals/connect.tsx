@@ -30,10 +30,13 @@ export const ConnectModal: React.FC<ConnectModalProps> = ({
     connectionCallback?.(false);
   };
 
-  function onSubmit(connector: Connector) {
-    setAdding(null);
-    connectionCallback?.(connector);
-  }
+  const onSubmit = React.useCallback(
+    (connector: Connector) => {
+      setAdding(null);
+      connectionCallback?.(connector);
+    },
+    [setAdding, connectionCallback]
+  );
 
   const providers = Object.entries(PROVIDERS).filter(
     ([, provider]) => typeof window !== 'undefined' && provider.showInList()

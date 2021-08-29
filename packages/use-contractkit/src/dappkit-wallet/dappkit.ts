@@ -22,7 +22,7 @@ export {
   SignTxRequest,
 } from '@celo/utils';
 
-const localStorageKey = 'use-contractkit/dappkit';
+export const valoraLocalStorageKey = 'use-contractkit/dappkit';
 // hack to get around deeplinking issue where new tabs are opened
 // and the url hash state is not respected (Note this implementation
 // of dappkit doesn't use URL hashes to always force the newtab experience).
@@ -31,32 +31,34 @@ const checkUrlValora = (onTrue?: () => any) => {
     const nonHashUrl = window.location.href.replace('/#', '');
     const params = new URL(nonHashUrl).searchParams;
     if (params.get('type') && params.get('requestId')) {
-      localStorage.setItem(localStorageKey, nonHashUrl);
+      localStorage.setItem(valoraLocalStorageKey, nonHashUrl);
       onTrue && onTrue();
     }
   }
 };
 
-checkUrlValora(window.close);
+if (typeof window !== 'undefined') {
+  checkUrlValora(window.close);
+}
 
 async function waitForResponse() {
   for (;;) {
-    let value = localStorage.getItem(localStorageKey);
+    let value = localStorage.getItem(valoraLocalStorageKey);
     if (!value) {
       checkUrlValora();
-      value = localStorage.getItem(localStorageKey);
+      value = localStorage.getItem(valoraLocalStorageKey);
     }
     if (value) {
-      localStorage.removeItem(localStorageKey);
       return value;
     }
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 }
 
 export async function waitForAccountAuth(
   requestId: string
 ): Promise<AccountAuthResponseSuccess> {
+  localStorage.removeItem(valoraLocalStorageKey);
   const url = await waitForResponse();
   const dappKitResponse = parseDappkitResponseDeeplink(url);
   if (
@@ -73,6 +75,7 @@ export async function waitForAccountAuth(
 export async function waitForSignedTxs(
   requestId: string
 ): Promise<SignTxResponseSuccess> {
+  localStorage.removeItem(valoraLocalStorageKey);
   const url = await waitForResponse();
 
   const dappKitResponse = parseDappkitResponseDeeplink(url);

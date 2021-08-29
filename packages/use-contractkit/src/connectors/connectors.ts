@@ -9,7 +9,7 @@ import {
 import { isMobile } from 'react-device-detect';
 
 import { localStorageKeys, WalletTypes } from '../constants';
-import { DappKitWallet } from '../dappkit-wallet';
+import { dappKitConfigKey, DappKitWallet } from '../dappkit-wallet';
 import { ChainId, Connector, Network } from '../types';
 
 type Web3Type = Parameters<typeof newKitFromWeb3>[0];
@@ -313,16 +313,21 @@ export class WalletConnectConnector implements Connector {
   }
 }
 export class ValoraConnector implements Connector {
-  public initialised = true;
+  public initialised = false;
   public type = WalletTypes.Valora;
   public kit: ContractKit;
   public wallet: DappKitWallet;
 
   get account(): string | null {
-    return this.wallet.account;
+    const storedConfig = localStorage.getItem(dappKitConfigKey);
+    let dappKitConfig = storedConfig ? JSON.parse(storedConfig) : null;
+    if (dappKitConfig) {
+      return dappKitConfig.phoneNumber;
+    }
+    return null;
   }
 
-  constructor(private network: Network, private dappName: string) {
+  constructor(private network: Network, dappName: string) {
     localStorage.setItem(
       localStorageKeys.lastUsedWalletType,
       WalletTypes.Valora
@@ -343,11 +348,13 @@ export class ValoraConnector implements Connector {
     this.kit = newKit(this.network.rpcUrl, this.wallet);
     this.kit.defaultAccount = this.wallet.getAccounts()[0];
     this.wallet.setKit(this.kit);
+    this.initialised = true;
 
     return this;
   }
 
   close(): void {
+    localStorage.removeItem(dappKitConfigKey);
     return;
   }
 }

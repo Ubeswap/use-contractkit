@@ -10,6 +10,8 @@ import {
   waitForSignedTxs,
 } from './dappkit';
 
+export const dappKitConfigKey = 'use-contractkit/dappkitconfig';
+
 export class DappKitSigner implements Signer {
   constructor(protected account: string) {}
 
@@ -48,7 +50,6 @@ const randomString = () => (Math.random() * 100).toString().slice(0, 6);
 
 export class DappKitWallet extends RemoteWallet<DappKitSigner> {
   private kit?: ContractKit;
-  public account: string | null = null;
 
   constructor(protected dappName: string) {
     super();
@@ -57,19 +58,27 @@ export class DappKitWallet extends RemoteWallet<DappKitSigner> {
   async loadAccountSigners(): Promise<Map<string, DappKitSigner>> {
     const addressToSigner = new Map<string, DappKitSigner>();
 
-    const requestId = `login-${randomString()}`;
-    requestAccountAddress({
-      requestId,
-      dappName: this.dappName,
-      callback: window.location.href.replace('/#/', ''),
-    });
+    const storedConfig = localStorage.getItem(dappKitConfigKey);
+    let dappKitConfig = storedConfig ? JSON.parse(storedConfig) : null;
+    if (!dappKitConfig) {
+      const requestId = `login-${randomString()}`;
+      requestAccountAddress({
+        requestId,
+        dappName: this.dappName,
+        callback: window.location.href.replace('/#', ''),
+      });
+      const dappkitResponse = await waitForAccountAuth(requestId);
+      dappKitConfig = {
+        address: dappkitResponse.address,
+        phoneNumber: dappkitResponse.phoneNumber,
+      };
+      localStorage.setItem(dappKitConfigKey, JSON.stringify(dappKitConfig));
+    }
 
-    const dappkitResponse = await waitForAccountAuth(requestId);
     addressToSigner.set(
-      dappkitResponse.address,
-      new DappKitSigner(dappkitResponse.address)
+      dappKitConfig.address,
+      new DappKitSigner(dappKitConfig.address)
     );
-    this.account = dappkitResponse.phoneNumber;
     return addressToSigner;
   }
 
@@ -99,7 +108,7 @@ export class DappKitWallet extends RemoteWallet<DappKitSigner> {
     await requestTxSig(this.kit, [txParams], {
       requestId,
       dappName: this.dappName,
-      callback: window.location.href.replace('/#/', ''),
+      callback: window.location.href.replace('/#', ''),
     });
 
     const dappkitResponse = await waitForSignedTxs(requestId);

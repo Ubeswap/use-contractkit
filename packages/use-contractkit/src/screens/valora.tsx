@@ -25,7 +25,7 @@ export const ValoraWallet: React.FC<ConnectorProps> = ({
     } else {
       console.log('error', { error });
     }
-  }, [initConnector, network, onSubmit]);
+  }, [initConnector, network, onSubmit, dapp.name]);
 
   useEffect(() => {
     void initialiseConnection();
