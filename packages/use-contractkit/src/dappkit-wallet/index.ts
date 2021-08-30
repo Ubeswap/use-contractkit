@@ -65,7 +65,7 @@ export class DappKitWallet extends RemoteWallet<DappKitSigner> {
       requestAccountAddress({
         requestId,
         dappName: this.dappName,
-        callback: window.location.href.replace('/#', ''),
+        callback: window.location.href,
       });
       const dappkitResponse = await waitForAccountAuth(requestId);
       dappKitConfig = {
@@ -108,7 +108,7 @@ export class DappKitWallet extends RemoteWallet<DappKitSigner> {
     await requestTxSig(this.kit, [txParams], {
       requestId,
       dappName: this.dappName,
-      callback: window.location.href.replace('/#', ''),
+      callback: window.location.href,
     });
 
     const dappkitResponse = await waitForSignedTxs(requestId);
