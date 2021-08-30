@@ -41,11 +41,18 @@ if (typeof window !== 'undefined') {
   checkUrlValora(window.close);
 }
 
+function clearParams() {
+  const whereQuery = window.location.href.indexOf('?');
+  if (whereQuery) {
+    window.location.href = window.location.href.substring(0, whereQuery);
+  }
+}
+
 async function waitForResponse() {
   for (;;) {
     let value = localStorage.getItem(valoraLocalStorageKey);
     if (!value) {
-      checkUrlValora();
+      checkUrlValora(clearParams);
       value = localStorage.getItem(valoraLocalStorageKey);
     }
     if (value) {
@@ -58,7 +65,6 @@ async function waitForResponse() {
 export async function waitForAccountAuth(
   requestId: string
 ): Promise<AccountAuthResponseSuccess> {
-  localStorage.removeItem(valoraLocalStorageKey);
   const url = await waitForResponse();
   const dappKitResponse = parseDappkitResponseDeeplink(url);
   if (
@@ -75,7 +81,6 @@ export async function waitForAccountAuth(
 export async function waitForSignedTxs(
   requestId: string
 ): Promise<SignTxResponseSuccess> {
-  localStorage.removeItem(valoraLocalStorageKey);
   const url = await waitForResponse();
 
   const dappKitResponse = parseDappkitResponseDeeplink(url);
@@ -92,6 +97,8 @@ export async function waitForSignedTxs(
 }
 
 export function requestAccountAddress(meta: DappKitRequestMeta): void {
+  localStorage.removeItem(valoraLocalStorageKey);
+
   const deepLink = serializeDappKitRequestDeeplink(AccountAuthRequest(meta));
   Linking.openURL(deepLink);
 }
@@ -101,6 +108,8 @@ export async function requestTxSig(
   txParams: CeloTx[],
   meta: DappKitRequestMeta
 ): Promise<void> {
+  localStorage.removeItem(valoraLocalStorageKey);
+
   const baseNonce = await kit.connection.nonce(txParams[0]?.from as string);
   const txs = txParams.map((txParam: CeloTx, index: number) => {
     const value = txParam.value === undefined ? '0' : txParam.value;
