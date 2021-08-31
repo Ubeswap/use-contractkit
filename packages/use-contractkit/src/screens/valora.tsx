@@ -1,45 +1,55 @@
-import QrCode from 'qrcode.react';
-import React from 'react';
-import { isMobile } from 'react-device-detect';
+import React, { useCallback, useEffect } from 'react';
 import Loader from 'react-loader-spinner';
+import { AddCeloNetworkButton } from '../components/AddCeloNetworkButton';
+import { UnsupportedChainIdError, ValoraConnector } from '../connectors';
 
-import { useWalletConnectConnector } from '../connectors/useWalletConnectConnector';
 import { Connector } from '../types';
+import { useContractKitInternal } from '../use-contractkit';
 
 interface Props {
   onSubmit: (connector: Connector) => void;
 }
 
-const getDeepLink = (uri: string) => {
-  return `celo://wallet/wc?uri=${uri}`;
-};
-
 export const Valora: React.FC<Props> = ({ onSubmit }: Props) => {
-  const uri = useWalletConnectConnector(onSubmit, isMobile, getDeepLink);
+  const {
+    network,
+    initConnector,
+    initError: error,
+    dapp,
+  } = useContractKitInternal();
+
+  const initialiseConnection = useCallback(async () => {
+    const connector = new ValoraConnector(network, dapp.name);
+    try {
+      await initConnector(connector);
+      onSubmit(connector);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [initConnector, network, onSubmit, dapp.name]);
+
+  useEffect(() => {
+    void initialiseConnection();
+  }, [initialiseConnection]);
+
+  if (error?.name === UnsupportedChainIdError.NAME) {
+    return (
+      <div className="tw-flex tw-items-center tw-justify-center tw-flex-col">
+        <p className="tw-text-red-500 tw-pb-4">
+          Please connect to the Celo network to continue.
+        </p>
+        <AddCeloNetworkButton chainId={network.chainId} />
+      </div>
+    );
+  }
 
   return (
-    <div className="tw-flex tw-flex-col tw-items-center">
-      <h1 className="tw-text-lg dark:tw-text-gray-200 tw-font-medium">
-        Valora
-      </h1>
-      <div className="tw-w-64 tw-text-gray-600 dark:tw-text-gray-400 tw-text-sm tw-mt-2 tw-text-center">
-        {`Opening Valora Wallet. If it doesn't open, you can scan this QR code.`}
-      </div>
-
-      <div className="tw-mt-6 tw-mb-2">
-        {uri ? (
-          <QrCode value={uri} size={180} />
-        ) : (
-          <div className="tw-my-8 tw-flex tw-items-center tw-justify-center">
-            <Loader
-              type="TailSpin"
-              color="#666666"
-              height="60px"
-              width="60px"
-            />
-          </div>
-        )}
-      </div>
+    <div className="tw-flex tw-items-center tw-justify-center">
+      {error ? (
+        <p className="tw-text-red-500 tw-pb-4">{error.message}</p>
+      ) : (
+        <Loader type="TailSpin" color="white" height="36px" width="36px" />
+      )}
     </div>
   );
 };
