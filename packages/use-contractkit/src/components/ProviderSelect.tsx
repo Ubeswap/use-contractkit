@@ -1,4 +1,6 @@
 import React from 'react';
+import { isMobile } from 'react-device-detect';
+import { SupportedProviders } from '../constants';
 
 import { Provider } from '../types';
 
@@ -11,6 +13,19 @@ export const ProviderSelect: React.FC<Props> = ({
   provider,
   onClick,
 }: Props) => {
+  let title = (
+    <div className="tw-pb-1 tw-font-medium dark:tw-text-gray-300">
+      {provider.canConnect() ? provider.name : `Install ${provider.name}`}
+    </div>
+  );
+  if (isMobile && provider.name === SupportedProviders.MetaMask) {
+    title = (
+      <div className="tw-pb-1 tw-font-medium dark:tw-text-gray-300">
+        {provider.canConnect() ? provider.name : `Open ${provider.name}`}
+      </div>
+    );
+  }
+
   return (
     <button
       className="tw-flex tw-flex-row tw-items-center tw-text-left tw-py-4 tw-pl-3 tw-pr-2 tw-w-80 md:tw-w-96 hover:tw-bg-gray-100 dark:hover:tw-bg-gray-700 tw-transition tw-rounded-md  focus:tw-outline-none"
@@ -37,9 +52,7 @@ export const ProviderSelect: React.FC<Props> = ({
         </span>
       </div>
       <div>
-        <div className="tw-pb-1 tw-font-medium dark:tw-text-gray-300">
-          {provider.canConnect() ? provider.name : `Install ${provider.name}`}
-        </div>
+        {title}
         <div className="tw-text-sm tw-text-gray-600 dark:tw-text-gray-400">
           {provider.description}
         </div>
