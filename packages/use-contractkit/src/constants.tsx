@@ -46,6 +46,16 @@ export const PROVIDERS: {
     listPriority: () => 0,
     installURL: 'https://valoraapp.com/',
   },
+  [SupportedProviders.CeloExtensionWallet]: {
+    name: 'Celo Extension Wallet',
+    description: 'Use a wallet from the the Celo chrome extension',
+    icon: CHROME_EXTENSION_STORE,
+    canConnect: () => !!window.celo,
+    showInList: () => !isMobile,
+    listPriority: () => 0,
+    installURL:
+      'https://chrome.google.com/webstore/detail/celoextensionwallet/kkilomkmpmkbdnfelcpgckmpcaemjcdh/related',
+  },
   [SupportedProviders.WalletConnect]: {
     name: 'WalletConnect',
     description: 'Scan a QR code to connect your wallet',
@@ -68,7 +78,7 @@ export const PROVIDERS: {
     icon: CELO,
     canConnect: () => true,
     showInList: () => true,
-    listPriority: () => (!isMobile ? 0 : 1),
+    listPriority: () => 1,
   },
   [SupportedProviders.CeloTerminal]: {
     name: 'Celo Terminal',
@@ -103,16 +113,6 @@ export const PROVIDERS: {
     showInList: () => !isMobile,
     listPriority: () => 0,
     installURL: 'https://metamask.app.link/',
-  },
-  [SupportedProviders.CeloExtensionWallet]: {
-    name: 'Celo Extension Wallet',
-    description: 'Use a wallet from the the Celo chrome extension',
-    icon: CHROME_EXTENSION_STORE,
-    canConnect: () => !!window.celo,
-    showInList: () => !isMobile,
-    listPriority: () => 1,
-    installURL:
-      'https://chrome.google.com/webstore/detail/celoextensionwallet/kkilomkmpmkbdnfelcpgckmpcaemjcdh/related',
   },
   [SupportedProviders.Injected]: {
     name: 'Ethereum Web3',
