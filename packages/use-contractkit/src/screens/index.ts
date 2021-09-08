@@ -1,4 +1,5 @@
 import React from 'react';
+import { isMobile } from 'react-device-detect';
 
 import { SupportedProviders } from '../constants';
 import { Connector } from '../types';
@@ -14,7 +15,7 @@ import { WalletConnect } from './wallet-connect';
 export const defaultScreens: {
   [P in SupportedProviders]: React.FC<ConnectorProps>;
 } = {
-  [SupportedProviders.Valora]: Valora,
+  [SupportedProviders.Valora]: isMobile ? Valora : WalletConnect,
   [SupportedProviders.MetaMask]: MetaMaskWallet,
   [SupportedProviders.WalletConnect]: WalletConnect,
   [SupportedProviders.Ledger]: Ledger,
