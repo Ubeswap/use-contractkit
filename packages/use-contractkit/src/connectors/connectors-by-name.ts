@@ -1,3 +1,4 @@
+import { isMobile } from 'react-device-detect';
 import { WalletTypes } from '../constants';
 import { Connector, Network } from '../types';
 import {
@@ -24,7 +25,7 @@ export const CONNECTOR_TYPES: {
   [WalletTypes.MetaMask]: MetaMaskConnector,
   [WalletTypes.PrivateKey]: PrivateKeyConnector,
   [WalletTypes.Unauthenticated]: UnauthenticatedConnector,
-  [WalletTypes.Valora]: ValoraConnector,
+  [WalletTypes.Valora]: isMobile ? ValoraConnector : WalletConnectConnector,
   [WalletTypes.WalletConnect]: WalletConnectConnector,
   [WalletTypes.CeloTerminal]: WalletConnectConnector,
   [WalletTypes.CeloWallet]: WalletConnectConnector,
