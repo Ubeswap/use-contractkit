@@ -25,7 +25,7 @@ export enum SupportedProviders {
   CeloTerminal = 'Celo Terminal',
   CeloWallet = 'Celo Wallet',
   CeloDance = 'CeloDance',
-  Injected = 'Injected',
+  Injected = 'Ethereum Web3',
   Ledger = 'Ledger',
   MetaMask = 'MetaMask',
   PrivateKey = 'Private key',
@@ -89,6 +89,16 @@ export const PROVIDERS: {
     showInList: () => !isMobile,
     listPriority: () => 1,
   },
+  [SupportedProviders.Injected]: {
+    name: 'Ethereum Web3',
+    description: 'Connect any Ethereum wallet to Celo',
+    icon: ETHEREUM,
+    canConnect: () => !!window.ethereum,
+    showInList: () => !!window.ethereum,
+    // Prioritize if window.ethereum is present but MetaMask is not
+    listPriority: () =>
+      window.ethereum && !window.ethereum?.isMetaMask ? 0 : 1,
+  },
   [SupportedProviders.MetaMask]: {
     name: 'MetaMask',
     description: isMobile ? (
@@ -115,14 +125,6 @@ export const PROVIDERS: {
     showInList: () => true,
     listPriority: () => 0,
     installURL: 'https://metamask.app.link/',
-  },
-  [SupportedProviders.Injected]: {
-    name: 'Ethereum Web3',
-    description: 'Connect any Ethereum wallet to Celo',
-    icon: ETHEREUM,
-    canConnect: () => !!window.ethereum,
-    showInList: () => !!window.ethereum && !window.ethereum.isMetaMask,
-    listPriority: () => 1,
   },
   [SupportedProviders.PrivateKey]: {
     name: 'Private Key',
