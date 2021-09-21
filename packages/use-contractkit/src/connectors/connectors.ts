@@ -156,9 +156,7 @@ export class InjectedConnector implements Connector {
     if (!ethereum) {
       throw new Error('Ethereum wallet not installed');
     }
-    this.type = ethereum.isMetaMask
-      ? WalletTypes.MetaMask
-      : WalletTypes.Injected;
+    this.type = WalletTypes.Injected;
     const web3 = new Web3(ethereum);
     void (await ethereum.request({ method: 'eth_requestAccounts' }));
 
