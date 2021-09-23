@@ -6,6 +6,7 @@ import {
   CELO_DANCE,
   CHROME_EXTENSION_STORE,
   ETHEREUM,
+  IMTOKEN,
   LEDGER,
   METAMASK,
   PRIVATE_KEY,
@@ -28,6 +29,7 @@ export enum SupportedProviders {
   Injected = 'Ethereum Web3',
   Ledger = 'Ledger',
   MetaMask = 'MetaMask',
+  imToken = 'imToken',
   PrivateKey = 'Private key',
   Valora = 'Valora',
   WalletConnect = 'WalletConnect',
@@ -89,20 +91,10 @@ export const PROVIDERS: {
     showInList: () => !isMobile,
     listPriority: () => 1,
   },
-  [SupportedProviders.Injected]: {
-    name: 'Ethereum Web3',
-    description: 'Connect any Ethereum wallet to Celo',
-    icon: ETHEREUM,
-    canConnect: () => !!window.ethereum,
-    showInList: () => !!window.ethereum,
-    // Prioritize if window.ethereum is present but MetaMask is not
-    listPriority: () =>
-      window.ethereum && !window.ethereum?.isMetaMask ? 0 : 1,
-  },
   [SupportedProviders.MetaMask]: {
     name: 'MetaMask',
     description: isMobile ? (
-      'Open this app in your Metamask app'
+      'Open Ubeswap in your Metamask app'
     ) : (
       <>
         Use the Metamask browser extension. Celo support is limited.{' '}
@@ -125,6 +117,33 @@ export const PROVIDERS: {
     showInList: () => true,
     listPriority: () => 0,
     installURL: 'https://metamask.app.link/',
+  },
+  [SupportedProviders.imToken]: {
+    name: 'imToken',
+    description: window.ethereum?.isImToken ? (
+      'Open Ubeswap in your imToken app'
+    ) : (
+      <>Connect with imToken</>
+    ),
+    icon: IMTOKEN,
+    canConnect: () => !!window.ethereum?.isImToken,
+    showInList: () => isMobile,
+    listPriority: () => (isMobile ? 0 : 1),
+    installURL: 'https://token.im/download',
+  },
+  [SupportedProviders.Injected]: {
+    name: 'Ethereum Web3',
+    description: 'Connect any Ethereum wallet to Celo',
+    icon: ETHEREUM,
+    canConnect: () => !!window.ethereum,
+    showInList: () => !!window.ethereum,
+    // Prioritize if window.ethereum is present but MetaMask is not
+    listPriority: () =>
+      window.ethereum &&
+      !window.ethereum?.isMetaMask &&
+      !window.ethereum?.isImToken
+        ? 0
+        : 1,
   },
   [SupportedProviders.PrivateKey]: {
     name: 'Private Key',
