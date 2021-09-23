@@ -16,6 +16,7 @@ declare global {
 interface Ethereum extends Exclude<AbstractProvider, 'request'> {
   on: AddEthereumEventListener;
   isMetaMask?: boolean;
+  isImToken?: boolean;
   request: EthereumRequest;
   enable: () => Promise<void>;
 }

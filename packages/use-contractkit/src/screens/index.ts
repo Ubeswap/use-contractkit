@@ -17,6 +17,7 @@ export const defaultScreens: {
 } = {
   [SupportedProviders.Valora]: isMobile ? Valora : WalletConnect,
   [SupportedProviders.MetaMask]: MetaMaskWallet,
+  [SupportedProviders.imToken]: MetaMaskWallet,
   [SupportedProviders.WalletConnect]: WalletConnect,
   [SupportedProviders.Ledger]: Ledger,
   [SupportedProviders.CeloWallet]: CeloWallet,

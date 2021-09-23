@@ -18,7 +18,13 @@ export const ProviderSelect: React.FC<Props> = ({
       {provider.canConnect() ? provider.name : `Install ${provider.name}`}
     </div>
   );
-  if (isMobile && provider.name === SupportedProviders.MetaMask) {
+  if (
+    isMobile &&
+    [
+      SupportedProviders.MetaMask.toString(),
+      SupportedProviders.imToken.toString(),
+    ].includes(provider.name)
+  ) {
     title = (
       <div className="tw-pb-1 tw-font-medium dark:tw-text-gray-300">
         {provider.canConnect() ? provider.name : `Open ${provider.name}`}
