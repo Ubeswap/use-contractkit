@@ -180,7 +180,9 @@ export const images = {
 export enum NetworkNames {
   Alfajores = 'Alfajores',
   Baklava = 'Baklava',
-  Mainnet = 'Mainnet',
+  CeloMainnet = 'CeloMainnet',
+  EthereumMainnet = 'EthereumMainnet',
+  Kovan = 'Kovan',
 }
 
 export const Alfajores = {
@@ -199,12 +201,32 @@ export const Baklava = {
   chainId: ChainId.Baklava,
 } as const;
 
-export const Mainnet = {
-  name: NetworkNames.Mainnet,
+export const CeloMainnet = {
+  name: NetworkNames.CeloMainnet,
   rpcUrl: 'https://forno.celo.org',
   graphQl: 'https://explorer.celo.org/graphiql',
   explorer: 'https://explorer.celo.org',
-  chainId: ChainId.Mainnet,
+  chainId: ChainId.CeloMainnet,
+} as const;
+
+export const EthereumMainnet = {
+  name: NetworkNames.EthereumMainnet,
+  rpcUrl:
+    process.env.ETHEREUM_RPC_URL ||
+    process.env.REACT_APP_ETHEREUM_RPC_URL ||
+    '',
+  graphQl: 'https://blockscout.com/eth/mainnet/graphiql',
+  explorer: 'https://etherscan.io',
+  chainId: ChainId.EthereumMainnet,
+} as const;
+
+export const Kovan = {
+  name: NetworkNames.Kovan,
+  rpcUrl:
+    process.env.KOVAN_RPC_URL || process.env.REACT_APP_KOVAN_RPC_URL || '',
+  graphQl: 'https://blockscout.com/eth/mainnet/graphiql', // TODO: Find graphql for Kovan
+  explorer: 'https://kovan.etherscan.io',
+  chainId: ChainId.Kovan,
 } as const;
 
 export enum WalletTypes {
@@ -243,9 +265,15 @@ export const getProviderForWallet = (
 /**
  * Default networks to connect to.
  */
-export const DEFAULT_NETWORKS = [Mainnet, Alfajores, Baklava];
+export const DEFAULT_NETWORKS = [
+  CeloMainnet,
+  Alfajores,
+  Baklava,
+  EthereumMainnet,
+  Kovan,
+];
 
 /**
  * Chain ID of a default network.
  */
-export type DefaultChainId = ChainId.Mainnet | ChainId.Alfajores;
+export type DefaultChainId = ChainId.CeloMainnet | ChainId.Alfajores;

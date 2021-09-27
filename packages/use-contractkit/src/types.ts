@@ -9,7 +9,9 @@ import { NetworkNames, WalletTypes } from './constants';
 export enum ChainId {
   Alfajores = 44787,
   Baklava = 62320,
-  Mainnet = 42220,
+  CeloMainnet = 42220,
+  EthereumMainnet = 1,
+  Kovan = 42,
 }
 
 /**
@@ -18,7 +20,7 @@ export enum ChainId {
 export interface Network {
   name: NetworkNames;
   rpcUrl: string;
-  graphQl: string;
+  graphQl?: string;
   explorer: string;
   chainId: ChainId;
 }
