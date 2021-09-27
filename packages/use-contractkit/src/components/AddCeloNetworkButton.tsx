@@ -1,6 +1,12 @@
 import React from 'react';
 
-import { Alfajores, Baklava, Mainnet } from '../constants';
+import {
+  Alfajores,
+  Baklava,
+  CeloMainnet,
+  EthereumMainnet,
+  Kovan,
+} from '../constants';
 import { ChainId, Network } from '../types';
 
 const CELO_PARAMS = {
@@ -26,10 +32,22 @@ const BAKLAVA_PARAMS = {
   },
 };
 
+const ETHEREUM_PARAMS = {
+  chainName: 'Ethereum',
+  nativeCurrency: { name: 'Ethereum', symbol: 'ETH', decimals: 18 as const },
+};
+
+const KOVAN_PARAMS = {
+  chainName: 'Kovan',
+  nativeCurrency: { name: 'Ethereum', symbol: 'ETH', decimals: 18 as const },
+};
+
 const params: { [chain in ChainId]: typeof CELO_PARAMS } = {
-  [ChainId.Mainnet]: CELO_PARAMS,
+  [ChainId.CeloMainnet]: CELO_PARAMS,
   [ChainId.Alfajores]: ALFAJORES_PARAMS,
   [ChainId.Baklava]: BAKLAVA_PARAMS,
+  [ChainId.EthereumMainnet]: ETHEREUM_PARAMS,
+  [ChainId.Kovan]: KOVAN_PARAMS,
 };
 
 interface AddEthereumChainParameter {
@@ -60,9 +78,11 @@ interface Props {
 }
 
 const NETWORKS = {
-  [ChainId.Mainnet]: Mainnet,
+  [ChainId.CeloMainnet]: CeloMainnet,
   [ChainId.Alfajores]: Alfajores,
   [ChainId.Baklava]: Baklava,
+  [ChainId.EthereumMainnet]: EthereumMainnet,
+  [ChainId.Kovan]: Kovan,
 };
 
 export const AddCeloNetworkButton: React.FC<Props> = ({ chainId }: Props) => {

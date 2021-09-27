@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 
 import { CONNECTOR_TYPES, UnauthenticatedConnector } from './connectors';
-import { DEFAULT_NETWORKS, Mainnet } from './constants';
+import { DEFAULT_NETWORKS, CeloMainnet } from './constants';
 import {
   Actions,
   ActionsMap,
@@ -49,7 +49,7 @@ type ContractKitContextInterface = readonly [
 ];
 
 const initialState = {
-  connector: new UnauthenticatedConnector(Mainnet),
+  connector: new UnauthenticatedConnector(CeloMainnet),
   connectorInitError: null,
   dapp: {
     name: 'Celo dApp',
@@ -57,7 +57,7 @@ const initialState = {
     url: 'https://celo.org',
     icon: 'https://celo.org/favicon.ico',
   },
-  network: Mainnet,
+  network: CeloMainnet,
   networks: DEFAULT_NETWORKS,
   pendingActionCount: 0,
   address: null,

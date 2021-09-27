@@ -2,7 +2,7 @@ import { CONNECTOR_TYPES, UnauthenticatedConnector } from '../connectors';
 import {
   DEFAULT_NETWORKS,
   localStorageKeys,
-  Mainnet,
+  CeloMainnet,
   NetworkNames,
   WalletTypes,
 } from '../constants';
@@ -13,7 +13,7 @@ export const loadPreviousConfig = (): {
   network: Network;
   connector: Connector;
 } => {
-  let lastUsedNetworkName: NetworkNames = Mainnet.name;
+  let lastUsedNetworkName: NetworkNames = CeloMainnet.name;
   let lastUsedAddress: string | null = null;
   let lastUsedWalletType: WalletTypes = WalletTypes.Unauthenticated;
   let lastUsedWalletArguments: unknown[] = [];
@@ -49,7 +49,7 @@ export const loadPreviousConfig = (): {
   }
 
   const lastUsedNetwork =
-    DEFAULT_NETWORKS.find((n) => n.name === lastUsedNetworkName) ?? Mainnet;
+    DEFAULT_NETWORKS.find((n) => n.name === lastUsedNetworkName) ?? CeloMainnet;
 
   let initialConnector: Connector;
   if (lastUsedWalletType) {
