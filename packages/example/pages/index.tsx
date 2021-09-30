@@ -3,7 +3,7 @@ import { ensureLeading0x } from '@celo/utils/lib/address';
 import {
   Alfajores,
   Baklava,
-  Mainnet,
+  CeloMainnet,
   useContractKit,
 } from '@celo-tools/use-contractkit';
 import { BigNumber } from 'bignumber.js';
@@ -27,7 +27,7 @@ function truncateAddress(address: string) {
   return `${address.slice(0, 8)}...${address.slice(36)}`;
 }
 
-const networks = [Alfajores, Baklava, Mainnet];
+const networks = [Alfajores, Baklava, CeloMainnet];
 
 export default function Home(): React.ReactElement {
   const {

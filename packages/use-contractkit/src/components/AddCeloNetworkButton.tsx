@@ -39,7 +39,11 @@ const ETHEREUM_PARAMS = {
 
 const KOVAN_PARAMS = {
   chainName: 'Kovan',
-  nativeCurrency: { name: 'Ethereum', symbol: 'ETH', decimals: 18 as const },
+  nativeCurrency: {
+    name: 'Kovan Ethereum',
+    symbol: 'KETH',
+    decimals: 18 as const,
+  },
 };
 
 const params: { [chain in ChainId]: typeof CELO_PARAMS } = {
