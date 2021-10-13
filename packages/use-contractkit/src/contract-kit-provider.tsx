@@ -90,7 +90,7 @@ export const ContractKitProvider: React.FC<ContractKitProviderProps> = ({
   connectModal,
   actionModal,
   dapp,
-  network = Mainnet,
+  network = CeloMainnet,
   networks = DEFAULT_NETWORKS,
 }: ContractKitProviderProps) => {
   const isMountedRef = useIsMounted();
