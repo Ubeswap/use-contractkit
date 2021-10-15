@@ -381,7 +381,54 @@ export class ValoraConnector implements Connector {
       JSON.stringify([dappName])
     );
 
-    this.wallet = new DappKitWallet(dappName);
+    this.wallet = new DappKitWallet(dappName, this.type);
+    this.kit = newKit(network.rpcUrl, this.wallet);
+    this.wallet.setKit(this.kit);
+  }
+
+  async initialise(): Promise<this> {
+    await this.wallet.init();
+
+    this.kit = newKit(this.network.rpcUrl, this.wallet);
+    this.kit.defaultAccount = this.wallet.getAccounts()[0];
+    this.wallet.setKit(this.kit);
+    this.initialised = true;
+
+    return this;
+  }
+
+  close(): void {
+    localStorage.removeItem(dappKitConfigKey);
+    return;
+  }
+}
+
+export class CeloDanceConnector implements Connector {
+  public initialised = false;
+  public type = WalletTypes.CeloDance;
+  public kit: ContractKit;
+  public wallet: DappKitWallet;
+
+  get account(): string | null {
+    const storedConfig = localStorage.getItem(dappKitConfigKey);
+    let dappKitConfig = storedConfig ? JSON.parse(storedConfig) : null;
+    if (dappKitConfig) {
+      return dappKitConfig.phoneNumber;
+    }
+    return null;
+  }
+
+  constructor(private network: Network, dappName: string) {
+    localStorage.setItem(
+      localStorageKeys.lastUsedWalletType,
+      WalletTypes.CeloDance
+    );
+    localStorage.setItem(
+      localStorageKeys.lastUsedWalletArguments,
+      JSON.stringify([dappName])
+    );
+
+    this.wallet = new DappKitWallet(dappName, this.type);
     this.kit = newKit(network.rpcUrl, this.wallet);
     this.wallet.setKit(this.kit);
   }

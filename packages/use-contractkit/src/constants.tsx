@@ -4,6 +4,7 @@ import { isMobile } from 'react-device-detect';
 import { ChainId, Provider } from './types';
 import {
   CELO,
+  CELO_DANCE,
   CHROME_EXTENSION_STORE,
   ETHEREUM,
   IMTOKEN,
@@ -31,6 +32,7 @@ export enum SupportedProviders {
   imToken = 'imToken',
   PrivateKey = 'Private key',
   Valora = 'Valora',
+  CeloDance = 'CeloDance',
   WalletConnect = 'WalletConnect',
 }
 
@@ -153,6 +155,15 @@ export const PROVIDERS: {
     showInList: () => process.env.NODE_ENV !== 'production',
     listPriority: () => 1,
   },
+  [SupportedProviders.CeloDance]: {
+    name: 'CeloDance',
+    description: 'Send, vote, and earn rewards within one wallet',
+    icon: CELO_DANCE,
+    canConnect: () => true,
+    showInList: () => true,
+    listPriority: () => 1,
+    installURL: 'https://celo.dance/',
+  },
 };
 
 export const images = {
@@ -164,6 +175,7 @@ export const images = {
   [SupportedProviders.CeloTerminal]: CELO,
   [SupportedProviders.CeloExtensionWallet]: CHROME_EXTENSION_STORE,
   [SupportedProviders.PrivateKey]: PRIVATE_KEY,
+  [SupportedProviders.CeloDance]: CELO_DANCE,
 } as const;
 
 export enum NetworkNames {
@@ -198,6 +210,7 @@ export const Mainnet = {
 
 export enum WalletTypes {
   Valora = 'Valora',
+  CeloDance = 'CeloDance',
   MetaMask = 'MetaMask',
   WalletConnect = 'WalletConnect',
   CeloWallet = 'CeloWallet',

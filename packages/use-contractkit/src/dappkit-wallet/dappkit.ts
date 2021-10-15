@@ -6,12 +6,14 @@ import {
   DappKitRequestMeta,
   DappKitRequestTypes,
   DappKitResponseStatus,
+  DAPPKIT_BASE_HOST,
   parseDappkitResponseDeeplink,
   serializeDappKitRequestDeeplink,
   SignTxRequest,
   SignTxResponseSuccess,
   TxToSignParam,
 } from '@celo/utils';
+import { WalletTypes } from '../constants';
 
 import Linking from './linking';
 
@@ -21,6 +23,8 @@ export {
   serializeDappKitRequestDeeplink,
   SignTxRequest,
 } from '@celo/utils';
+
+const CELO_DANCE_HOST = 'celo://wallet/dappkit/celodance';
 
 export const valoraLocalStorageKey = 'use-contractkit/dappkit';
 // hack to get around deeplinking issue where new tabs are opened
@@ -100,7 +104,11 @@ export function requestAccountAddress(meta: DappKitRequestMeta): void {
   localStorage.removeItem(valoraLocalStorageKey);
 
   const deepLink = serializeDappKitRequestDeeplink(AccountAuthRequest(meta));
-  Linking.openURL(deepLink);
+  if (meta.requestId.endsWith(WalletTypes.CeloDance)) {
+    Linking.openURL(deepLink.replace(DAPPKIT_BASE_HOST, CELO_DANCE_HOST));
+  } else {
+    Linking.openURL(deepLink);
+  }
 }
 
 export async function requestTxSig(
@@ -124,5 +132,10 @@ export async function requestTxSig(
   });
 
   const request = SignTxRequest(txs, meta);
-  Linking.openURL(serializeDappKitRequestDeeplink(request));
+  const deepLink = serializeDappKitRequestDeeplink(request);
+  if (meta.requestId.endsWith(WalletTypes.CeloDance)) {
+    Linking.openURL(deepLink.replace(DAPPKIT_BASE_HOST, CELO_DANCE_HOST));
+  } else {
+    Linking.openURL(deepLink);
+  }
 }

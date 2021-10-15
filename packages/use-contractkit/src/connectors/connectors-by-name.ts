@@ -2,6 +2,7 @@ import { isMobile } from 'react-device-detect';
 import { WalletTypes } from '../constants';
 import { Connector, Network } from '../types';
 import {
+  CeloDanceConnector,
   CeloExtensionWalletConnector,
   InjectedConnector,
   LedgerConnector,
@@ -29,4 +30,5 @@ export const CONNECTOR_TYPES: {
   [WalletTypes.WalletConnect]: WalletConnectConnector,
   [WalletTypes.CeloTerminal]: WalletConnectConnector,
   [WalletTypes.CeloWallet]: WalletConnectConnector,
+  [WalletTypes.CeloDance]: isMobile ? CeloDanceConnector : WalletConnectConnector,
 };

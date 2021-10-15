@@ -2,6 +2,7 @@ import { CeloTx, EncodedTransaction, Signer } from '@celo/connect';
 import { ContractKit } from '@celo/contractkit';
 import { EIP712TypedData } from '@celo/utils/lib/sign-typed-data-utils';
 import { RemoteWallet } from '@celo/wallet-remote';
+import { WalletTypes } from '../constants';
 
 import {
   requestAccountAddress,
@@ -51,7 +52,7 @@ const randomString = () => (Math.random() * 100).toString().slice(0, 6);
 export class DappKitWallet extends RemoteWallet<DappKitSigner> {
   private kit?: ContractKit;
 
-  constructor(protected dappName: string) {
+  constructor(protected dappName: string, protected walletTypes: WalletTypes) {
     super();
   }
 
@@ -61,7 +62,7 @@ export class DappKitWallet extends RemoteWallet<DappKitSigner> {
     const storedConfig = localStorage.getItem(dappKitConfigKey);
     let dappKitConfig = storedConfig ? JSON.parse(storedConfig) : null;
     if (!dappKitConfig) {
-      const requestId = `login-${randomString()}`;
+      const requestId = `login-${randomString()}-${this.walletTypes}`;
       requestAccountAddress({
         requestId,
         dappName: this.dappName,
@@ -104,7 +105,7 @@ export class DappKitWallet extends RemoteWallet<DappKitSigner> {
       throw new Error('Must call setKit before using dappKit wallet');
     }
 
-    const requestId = `signTransaction-${randomString()}`;
+    const requestId = `signTransaction-${randomString()}-${this.walletTypes}`;
     await requestTxSig(this.kit, [txParams], {
       requestId,
       dappName: this.dappName,
