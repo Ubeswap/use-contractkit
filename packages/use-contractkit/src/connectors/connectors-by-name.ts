@@ -10,6 +10,7 @@ import {
   UnauthenticatedConnector,
   ValoraConnector,
   WalletConnectConnector,
+  CeloDanceConnector,
 } from './connectors';
 
 /**
@@ -30,4 +31,5 @@ export const CONNECTOR_TYPES: {
   [WalletTypes.CeloDance]: WalletConnectConnector,
   [WalletTypes.CeloTerminal]: WalletConnectConnector,
   [WalletTypes.CeloWallet]: WalletConnectConnector,
+  [WalletTypes.CeloDance]: isMobile ? CeloDanceConnector : WalletConnectConnector,
 };

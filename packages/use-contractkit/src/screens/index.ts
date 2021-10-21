@@ -21,7 +21,7 @@ export const defaultScreens: {
   [SupportedProviders.WalletConnect]: WalletConnect,
   [SupportedProviders.Ledger]: Ledger,
   [SupportedProviders.CeloWallet]: CeloWallet,
-  [SupportedProviders.CeloDance]: CeloDance,
+  [SupportedProviders.CeloDance]: isMobile ? CeloDance : WalletConnect,
   [SupportedProviders.CeloTerminal]: WalletConnect,
   [SupportedProviders.CeloExtensionWallet]: CeloExtensionWallet,
   [SupportedProviders.Injected]: MetaMaskWallet,
