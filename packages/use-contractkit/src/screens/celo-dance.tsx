@@ -1,53 +1,55 @@
-import QrCode from 'qrcode.react';
-import React from 'react';
-import { isMobile } from 'react-device-detect';
+import React, { useCallback, useEffect } from 'react';
 import Loader from 'react-loader-spinner';
 
-import { CopyText } from '../components';
-import { useWalletConnectConnector } from '../connectors/useWalletConnectConnector';
+import { AddCeloNetworkButton } from '../components/AddCeloNetworkButton';
+import { CeloDanceConnector, UnsupportedChainIdError } from '../connectors';
 import { Connector } from '../types';
+import { useContractKitInternal } from '../use-contractkit';
 
 interface Props {
   onSubmit: (connector: Connector) => void;
 }
 
-const getDeepLink = (uri: string) => {
-  return `celo://wallet/wc?uri=${uri}`;
-};
-
 export const CeloDance: React.FC<Props> = ({ onSubmit }: Props) => {
-  const uri = useWalletConnectConnector(onSubmit, isMobile, getDeepLink);
+  const {
+    network,
+    initConnector,
+    initError: error,
+    dapp,
+  } = useContractKitInternal();
+
+  const initialiseConnection = useCallback(async () => {
+    const connector = new CeloDanceConnector(network, dapp.name);
+    try {
+      await initConnector(connector);
+      onSubmit(connector);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [initConnector, network, onSubmit, dapp.name]);
+
+  useEffect(() => {
+    void initialiseConnection();
+  }, [initialiseConnection]);
+
+  if (error?.name === UnsupportedChainIdError.NAME) {
+    return (
+      <div className="tw-flex tw-items-center tw-justify-center tw-flex-col">
+        <p className="tw-text-red-500 tw-pb-4">
+          Please connect to the Celo network to continue.
+        </p>
+        <AddCeloNetworkButton chainId={network.chainId} />
+      </div>
+    );
+  }
 
   return (
-    <div className="tw-flex tw-flex-col tw-items-center">
-      <h1 className="tw-text-lg dark:tw-text-gray-200 tw-font-medium">
-        CeloDance
-      </h1>
-      <div className="tw-w-64 md:w-80 tw-text-gray-600 dark:tw-text-gray-400 tw-text-sm tw-mt-2 tw-text-center">
-        Scan the QR code below or copy-paste the information into your wallet.
-      </div>
-
-      <div className="tw-mt-6">
-        {uri ? (
-          <>
-            <div>
-              <QrCode value={uri} size={isMobile ? 180 : 240} />
-              <div className="tw-mt-6 tw-flex tw-items-center tw-justify-center">
-                <CopyText text="Copy to clipboard" payload={uri} />
-              </div>
-            </div>
-          </>
-        ) : (
-          <div className="tw-my-8 tw-flex tw-items-center tw-justify-center">
-            <Loader
-              type="TailSpin"
-              color="#666666"
-              height="60px"
-              width="60px"
-            />
-          </div>
-        )}
-      </div>
+    <div className="tw-flex tw-items-center tw-justify-center">
+      {error ? (
+        <p className="tw-text-red-500 tw-pb-4">{error.message}</p>
+      ) : (
+        <Loader type="TailSpin" color="white" height="36px" width="36px" />
+      )}
     </div>
   );
 };
