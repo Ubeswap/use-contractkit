@@ -5,7 +5,7 @@ import {
   Baklava,
   CeloMainnet,
   useContractKit,
-} from '@celo-tools/use-contractkit';
+} from '@poofcash/use-contractkit';
 import { BigNumber } from 'bignumber.js';
 import Head from 'next/head';
 import { useCallback, useEffect, useState } from 'react';

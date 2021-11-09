@@ -52,7 +52,7 @@ export const PROVIDERS: {
     name: 'Celo Extension Wallet',
     description: 'Use a wallet from the the Celo chrome extension',
     icon: CHROME_EXTENSION_STORE,
-    canConnect: () => !!window.celo,
+    canConnect: () => typeof window !== 'undefined' && !!window.celo,
     showInList: () => !isMobile,
     listPriority: () => 0,
     installURL:
@@ -113,20 +113,23 @@ export const PROVIDERS: {
       </>
     ),
     icon: METAMASK,
-    canConnect: () => !!window.ethereum?.isMetaMask,
+    canConnect: () =>
+      typeof window !== 'undefined' && !!window.ethereum?.isMetaMask,
     showInList: () => true,
     listPriority: () => 0,
     installURL: 'https://metamask.app.link/',
   },
   [SupportedProviders.imToken]: {
     name: 'imToken',
-    description: window.ethereum?.isImToken ? (
-      'Open Ubeswap in your imToken app'
-    ) : (
-      <>Connect with imToken</>
-    ),
+    description:
+      typeof window !== 'undefined' && window.ethereum?.isImToken ? (
+        'Open Ubeswap in your imToken app'
+      ) : (
+        <>Connect with imToken</>
+      ),
     icon: IMTOKEN,
-    canConnect: () => !!window.ethereum?.isImToken,
+    canConnect: () =>
+      typeof window !== 'undefined' && !!window.ethereum?.isImToken,
     showInList: () => isMobile,
     listPriority: () => (isMobile ? 0 : 1),
     installURL: 'https://token.im/download',
@@ -135,10 +138,11 @@ export const PROVIDERS: {
     name: 'Ethereum Web3',
     description: 'Connect any Ethereum wallet to Celo',
     icon: ETHEREUM,
-    canConnect: () => !!window.ethereum,
-    showInList: () => !!window.ethereum,
+    canConnect: () => typeof window !== 'undefined' && !!window.ethereum,
+    showInList: () => typeof window !== 'undefined' && !!window.ethereum,
     // Prioritize if window.ethereum is present but MetaMask is not
     listPriority: () =>
+      typeof window !== 'undefined' &&
       window.ethereum &&
       !window.ethereum?.isMetaMask &&
       !window.ethereum?.isImToken

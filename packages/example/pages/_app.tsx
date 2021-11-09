@@ -1,7 +1,7 @@
-import '@celo-tools/use-contractkit/lib/styles.css';
+import '@poofcash/use-contractkit/lib/styles.css';
 import '../styles/global.css';
 
-import { ContractKitProvider, NetworkNames } from '@celo-tools/use-contractkit';
+import { ContractKitProvider, NetworkNames } from '@poofcash/use-contractkit';
 import { AppComponent, AppProps } from 'next/dist/shared/lib/router/router';
 import { Toaster } from 'react-hot-toast';
 
