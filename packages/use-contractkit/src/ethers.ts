@@ -7,10 +7,10 @@ import { useIsMounted } from './utils/useIsMounted';
 
 export const useProvider = (): Web3Provider => {
   const { kit, network } = useContractKit();
-  const {chainId, name} = network
+  const { chainId, name } = network;
   const provider = kit.web3.currentProvider as unknown as ExternalProvider;
   return useMemo(() => {
-    return new Web3Provider(provider, {chainId, name});
+    return new Web3Provider(provider, { chainId, name });
   }, [provider, chainId, name]);
 };
 
@@ -25,8 +25,9 @@ export const useProviderOrSigner = (): Web3Provider | JsonRpcSigner => {
 };
 
 export const useGetConnectedSigner = (): (() => Promise<JsonRpcSigner>) => {
-  const { kit, getConnectedKit } = useContractKit();
+  const { kit, getConnectedKit, network } = useContractKit();
   const signer = useProviderOrSigner();
+  const { chainId, name } = network;
   return useCallback(async () => {
     if (kit.defaultAccount) {
       return signer as JsonRpcSigner;
@@ -34,8 +35,10 @@ export const useGetConnectedSigner = (): (() => Promise<JsonRpcSigner>) => {
     const nextKit = await getConnectedKit();
     const nextProvider = nextKit.web3
       .currentProvider as unknown as ExternalProvider;
-    return new Web3Provider(nextProvider).getSigner(nextKit.defaultAccount);
-  }, [kit.defaultAccount, getConnectedKit, signer]);
+    return new Web3Provider(nextProvider, { chainId, name }).getSigner(
+      nextKit.defaultAccount
+    );
+  }, [kit.defaultAccount, getConnectedKit, signer, chainId, name]);
 };
 
 export const useLazyConnectedSigner = (): {
