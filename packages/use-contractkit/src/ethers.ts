@@ -6,11 +6,12 @@ import { useContractKit } from './use-contractkit';
 import { useIsMounted } from './utils/useIsMounted';
 
 export const useProvider = (): Web3Provider => {
-  const { kit } = useContractKit();
+  const { kit, network } = useContractKit();
+  const {chainId, name} = network
   const provider = kit.web3.currentProvider as unknown as ExternalProvider;
   return useMemo(() => {
-    return new Web3Provider(provider);
-  }, [provider]);
+    return new Web3Provider(provider, {chainId, name});
+  }, [provider, chainId, name]);
 };
 
 export const useProviderOrSigner = (): Web3Provider | JsonRpcSigner => {
