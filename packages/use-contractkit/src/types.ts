@@ -9,9 +9,13 @@ import { NetworkNames, WalletTypes } from './constants';
 export enum ChainId {
   Alfajores = 44787,
   Baklava = 62320,
-  CeloMainnet = 42220,
-  EthereumMainnet = 1,
+  Celo = 42220,
+
+  Ethereum = 1,
   Kovan = 42,
+
+  Fuji = 43113,
+  Avalanche = 43114,
 }
 
 /**
@@ -62,4 +66,5 @@ export interface Dapp {
   description: string;
   url: string;
   icon: string;
+  supportedNetworks: Network[];
 }

@@ -2,8 +2,13 @@ import { StableToken } from '@celo/contractkit';
 import { ensureLeading0x } from '@celo/utils/lib/address';
 import {
   Alfajores,
+  Avalanche,
   Baklava,
-  CeloMainnet,
+  Celo,
+  Ethereum,
+  Fuji,
+  Kovan,
+  Network,
   useContractKit,
 } from '@poofcash/use-contractkit';
 import { BigNumber } from 'bignumber.js';
@@ -27,7 +32,15 @@ function truncateAddress(address: string) {
   return `${address.slice(0, 8)}...${address.slice(36)}`;
 }
 
-const networks = [Alfajores, Baklava, CeloMainnet];
+const networks: Network[] = [
+  Alfajores,
+  Baklava,
+  Celo,
+  Ethereum,
+  Kovan,
+  Avalanche,
+  Fuji,
+];
 
 export default function Home(): React.ReactElement {
   const {

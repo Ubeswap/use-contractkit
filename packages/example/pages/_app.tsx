@@ -1,7 +1,13 @@
 import '@poofcash/use-contractkit/lib/styles.css';
 import '../styles/global.css';
 
-import { ContractKitProvider, NetworkNames } from '@poofcash/use-contractkit';
+import {
+  Alfajores,
+  Baklava,
+  Celo,
+  ContractKitProvider,
+  NetworkNames,
+} from '@poofcash/use-contractkit';
 import { AppComponent, AppProps } from 'next/dist/shared/lib/router/router';
 import { Toaster } from 'react-hot-toast';
 
@@ -13,6 +19,7 @@ const MyApp: AppComponent = ({ Component, pageProps }: AppProps) => {
         description: 'A demo DApp to showcase functionality',
         url: 'https://use-contractkit.vercel.app',
         icon: 'https://use-contractkit.vercel.app/favicon.ico',
+        supportedNetworks: [Celo, Alfajores, Baklava],
       }}
       network={{
         name: NetworkNames.Alfajores,

@@ -1,10 +1,13 @@
 import React from 'react';
 
+import { NetworkNames } from '..';
 import {
   Alfajores,
+  Avalanche,
   Baklava,
-  CeloMainnet,
-  EthereumMainnet,
+  Celo,
+  Ethereum,
+  Fuji,
   Kovan,
 } from '../constants';
 import { ChainId, Network } from '../types';
@@ -15,7 +18,7 @@ const CELO_PARAMS = {
 };
 
 const ALFAJORES_PARAMS = {
-  chainName: 'Alfajores Testnet',
+  chainName: 'Alfajores',
   nativeCurrency: {
     name: 'Alfajores Celo',
     symbol: 'A-CELO',
@@ -46,12 +49,24 @@ const KOVAN_PARAMS = {
   },
 };
 
+const AVALANCHE_PARAMS = {
+  chainName: NetworkNames.Avalanche,
+  nativeCurrency: { name: 'Avalanche', symbol: 'AVAX', decimals: 18 as const },
+};
+
+const FUJI_PARAMS = {
+  chainName: NetworkNames.Fuji,
+  nativeCurrency: { name: 'Avalanche', symbol: 'AVAX', decimals: 18 as const },
+};
+
 const params: { [chain in ChainId]: typeof CELO_PARAMS } = {
-  [ChainId.CeloMainnet]: CELO_PARAMS,
+  [ChainId.Celo]: CELO_PARAMS,
   [ChainId.Alfajores]: ALFAJORES_PARAMS,
   [ChainId.Baklava]: BAKLAVA_PARAMS,
-  [ChainId.EthereumMainnet]: ETHEREUM_PARAMS,
+  [ChainId.Ethereum]: ETHEREUM_PARAMS,
   [ChainId.Kovan]: KOVAN_PARAMS,
+  [ChainId.Avalanche]: AVALANCHE_PARAMS,
+  [ChainId.Fuji]: FUJI_PARAMS,
 };
 
 interface AddEthereumChainParameter {
@@ -82,14 +97,16 @@ interface Props {
 }
 
 const NETWORKS = {
-  [ChainId.CeloMainnet]: CeloMainnet,
+  [ChainId.Celo]: Celo,
   [ChainId.Alfajores]: Alfajores,
   [ChainId.Baklava]: Baklava,
-  [ChainId.EthereumMainnet]: EthereumMainnet,
+  [ChainId.Ethereum]: Ethereum,
   [ChainId.Kovan]: Kovan,
+  [ChainId.Avalanche]: Avalanche,
+  [ChainId.Fuji]: Fuji,
 };
 
-export const AddCeloNetworkButton: React.FC<Props> = ({ chainId }: Props) => {
+export const SwitchNetworkButton: React.FC<Props> = ({ chainId }: Props) => {
   const chainParams = params[chainId];
   return (
     <button

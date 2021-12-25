@@ -1,6 +1,7 @@
 import React from 'react';
 import { isMobile } from 'react-device-detect';
-import { ChainId, Provider } from './types';
+
+import { ChainId, Network, Provider } from './types';
 import {
   CELO,
   CELO_DANCE,
@@ -97,7 +98,7 @@ export const PROVIDERS: {
       'Open Ubeswap in your Metamask app'
     ) : (
       <>
-        Use the Metamask browser extension. Celo support is limited.{' '}
+        Use the Metamask browser extension.{' '}
         <a
           href="https://docs.celo.org/getting-started/wallets/using-metamask-with-celo"
           target="_blank"
@@ -179,59 +180,77 @@ export const images = {
   [SupportedProviders.CeloTerminal]: CELO,
   [SupportedProviders.CeloExtensionWallet]: CHROME_EXTENSION_STORE,
   [SupportedProviders.PrivateKey]: PRIVATE_KEY,
-} as const;
+};
 
 export enum NetworkNames {
+  Unknown = 'Unknown',
+
   Alfajores = 'Alfajores',
   Baklava = 'Baklava',
-  CeloMainnet = 'CeloMainnet',
-  EthereumMainnet = 'EthereumMainnet',
+  Celo = 'Celo',
+
+  Ethereum = 'Ethereum',
   Kovan = 'Kovan',
+
+  Fuji = 'Fuji',
+  Avalanche = 'Avalanche',
 }
 
-export const Alfajores = {
+export const Alfajores: Network = {
   name: NetworkNames.Alfajores,
   rpcUrl: 'https://alfajores-forno.celo-testnet.org',
   graphQl: 'https://alfajores-blockscout.celo-testnet.org/graphiql',
   explorer: 'https://alfajores-blockscout.celo-testnet.org',
   chainId: ChainId.Alfajores,
-} as const;
+};
 
-export const Baklava = {
+export const Baklava: Network = {
   name: NetworkNames.Baklava,
   rpcUrl: 'https://baklava-forno.celo-testnet.org',
   graphQl: 'https://baklava-blockscout.celo-testnet.org/graphiql',
   explorer: 'https://baklava-blockscout.celo-testnet.org',
   chainId: ChainId.Baklava,
-} as const;
+};
 
-export const CeloMainnet = {
-  name: NetworkNames.CeloMainnet,
+export const Celo: Network = {
+  name: NetworkNames.Celo,
   rpcUrl: 'https://forno.celo.org',
   graphQl: 'https://explorer.celo.org/graphiql',
   explorer: 'https://explorer.celo.org',
-  chainId: ChainId.CeloMainnet,
-} as const;
+  chainId: ChainId.Celo,
+};
 
-export const EthereumMainnet = {
-  name: NetworkNames.EthereumMainnet,
+export const Ethereum: Network = {
+  name: NetworkNames.Ethereum,
   rpcUrl:
     process.env.ETHEREUM_RPC_URL ||
     process.env.REACT_APP_ETHEREUM_RPC_URL ||
     '',
-  graphQl: 'https://blockscout.com/eth/mainnet/graphiql',
   explorer: 'https://etherscan.io',
-  chainId: ChainId.EthereumMainnet,
-} as const;
+  chainId: ChainId.Ethereum,
+};
 
-export const Kovan = {
+export const Kovan: Network = {
   name: NetworkNames.Kovan,
   rpcUrl:
     process.env.KOVAN_RPC_URL || process.env.REACT_APP_KOVAN_RPC_URL || '',
-  graphQl: 'https://blockscout.com/eth/mainnet/graphiql', // TODO: Find graphql for Kovan
   explorer: 'https://kovan.etherscan.io',
   chainId: ChainId.Kovan,
-} as const;
+};
+
+export const Avalanche: Network = {
+  name: NetworkNames.Avalanche,
+  rpcUrl: 'https://api.avax.network/ext/bc/C/rpc',
+  explorer: 'https://snowtrace.io',
+  chainId: ChainId.Avalanche,
+};
+
+export const Fuji: Network = {
+  name: NetworkNames.Fuji,
+  rpcUrl: 'https://api.avax-test.network/ext/bc/C/rpc',
+  explorer: 'https://testnet.snowtrace.io',
+  chainId: ChainId.Fuji,
+};
 
 export enum WalletTypes {
   Valora = 'Valora',
@@ -270,14 +289,23 @@ export const getProviderForWallet = (
  * Default networks to connect to.
  */
 export const DEFAULT_NETWORKS = [
-  CeloMainnet,
+  Celo,
   Alfajores,
   Baklava,
-  EthereumMainnet,
+  Ethereum,
   Kovan,
+  Avalanche,
+  Fuji,
 ];
 
 /**
  * Chain ID of a default network.
  */
-export type DefaultChainId = ChainId.CeloMainnet | ChainId.Alfajores;
+export type DefaultChainId = ChainId.Celo | ChainId.Alfajores;
+
+export const FALLBACK_NETWORK = (chainId: number): Network => ({
+  name: NetworkNames.Unknown,
+  rpcUrl: 'https://forno.celo.org', // TODO: Perhaps it should be null/empty
+  explorer: '',
+  chainId,
+});

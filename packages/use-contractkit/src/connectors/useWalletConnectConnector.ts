@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { CeloMainnet } from '../constants';
+import { Celo } from '../constants';
 import { Connector } from '../types';
 import { useContractKitInternal } from '../use-contractkit';
 import { WalletConnectConnector } from './connectors';
@@ -16,7 +16,7 @@ export function useWalletConnectConnector(
   useEffect(() => {
     let mounted = true;
     const initialiseConnection = async () => {
-      const isMainnet = network.name === CeloMainnet.name;
+      const isMainnet = network.name === Celo.name;
       const relayProvider = 'wss://relay.walletconnect.org';
       const connector = new WalletConnectConnector(
         network,

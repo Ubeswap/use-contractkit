@@ -1,4 +1,5 @@
 import { isMobile } from 'react-device-detect';
+
 import { WalletTypes } from '../constants';
 import { Connector, Network } from '../types';
 import {

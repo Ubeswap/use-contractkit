@@ -1,8 +1,7 @@
 import React from 'react';
 import Loader from 'react-loader-spinner';
 
-import { AddCeloNetworkButton } from '../components/AddCeloNetworkButton';
-import { UnsupportedChainIdError } from '../connectors';
+import { SwitchNetworkButton } from '../components/SwitchNetworkButton';
 import { useMetaMaskConnector } from '../connectors/useMetaMaskConnector';
 import { ConnectorProps } from '.';
 
@@ -10,28 +9,26 @@ export const MetaMaskWallet: React.FC<ConnectorProps> = ({
   onSubmit,
 }: ConnectorProps) => {
   const { error, dapp, network } = useMetaMaskConnector(onSubmit);
+  console.log('metamask', network);
 
-  if (error?.name === UnsupportedChainIdError.NAME) {
+  if (!dapp.supportedNetworks.includes(network)) {
     return (
       <div className="tw-space-y-6">
-        <p className="tw-text-xl font-medium dark:tw-text-gray-300">
-          Switch to the Celo Network
+        <p className="tw-text-xl tw-font-medium dark:tw-text-gray-200">
+          Change network
         </p>
-        <p className="dark:tw-text-gray-400">
-          In order to use {dapp.name} you must be connected to the Celo network.{' '}
-          <a
-            className="tw-underline tw-font-medium"
-            target="_blank"
-            rel="noreferrer"
-            href="https://docs.celo.org/getting-started/wallets/using-metamask-with-celo"
-          >
-            What does this mean?
-          </a>
+        <p className="tw-text-md tw-font-normal dark:tw-text-gray-200">
+          In order to use {dapp.name} you must be connected to one of the
+          following networks.{' '}
         </p>
 
-        <div className="tw-flex tw-justify-center">
-          <AddCeloNetworkButton chainId={network.chainId} />
-        </div>
+        {dapp.supportedNetworks.map((n, i) => {
+          return (
+            <div key={i} className="tw-flex tw-justify-center">
+              <SwitchNetworkButton chainId={n.chainId} />
+            </div>
+          );
+        })}
       </div>
     );
   }

@@ -6,9 +6,9 @@ import {
 } from '@celo/wallet-walletconnect';
 import { BigNumber } from 'bignumber.js';
 
-import { dappKitConfigKey, DappKitWallet } from '../dappkit-wallet';
 import { localStorageKeys, WalletTypes } from '../constants';
-import { ChainId, Connector, Network } from '../types';
+import { dappKitConfigKey, DappKitWallet } from '../dappkit-wallet';
+import { Connector, Network } from '../types';
 import { clearPreviousConfig } from '../utils/helpers';
 
 type Web3Type = Parameters<typeof newKitFromWeb3>[0];
@@ -160,11 +160,6 @@ export class InjectedConnector implements Connector {
     const web3 = new Web3(ethereum);
     void (await ethereum.request({ method: 'eth_requestAccounts' }));
 
-    const chainId = await web3.eth.getChainId();
-    if (!Object.values(ChainId).includes(chainId)) {
-      throw new UnsupportedChainIdError(chainId);
-    }
-
     ethereum.on('chainChanged', (chainIdHex: string) => {
       if (this.onNetworkChangeCallback) {
         const chainId = parseInt(chainIdHex, 16);
@@ -212,7 +207,7 @@ export class MetaMaskConnector extends InjectedConnector {
 
 export class CeloExtensionWalletConnector implements Connector {
   public initialised = false;
-  public type = WalletTypes.CeloExtensionWallet;
+  public type = WalletTypes.Injected;
   public kit: ContractKit;
   public account: string | null = null;
   private onNetworkChangeCallback?: (chainId: number) => void;

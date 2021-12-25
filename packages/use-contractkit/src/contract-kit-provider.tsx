@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 
 import { CONNECTOR_TYPES, UnauthenticatedConnector } from './connectors';
-import { DEFAULT_NETWORKS, CeloMainnet } from './constants';
+import { Celo, DEFAULT_NETWORKS } from './constants';
 import {
   Actions,
   ActionsMap,
@@ -49,15 +49,16 @@ type ContractKitContextInterface = readonly [
 ];
 
 const initialState = {
-  connector: new UnauthenticatedConnector(CeloMainnet),
+  connector: new UnauthenticatedConnector(Celo),
   connectorInitError: null,
   dapp: {
-    name: 'Celo dApp',
-    description: 'Celo dApp',
+    name: 'dApp',
+    description: 'dApp',
     url: 'https://celo.org',
     icon: 'https://celo.org/favicon.ico',
+    supportedNetworks: [],
   },
-  network: CeloMainnet,
+  network: Celo,
   networks: DEFAULT_NETWORKS,
   pendingActionCount: 0,
   address: null,
@@ -90,20 +91,19 @@ export const ContractKitProvider: React.FC<ContractKitProviderProps> = ({
   connectModal,
   actionModal,
   dapp,
-  network = CeloMainnet,
   networks = DEFAULT_NETWORKS,
 }: ContractKitProviderProps) => {
   const isMountedRef = useIsMounted();
   const previousConfig = useMemo(loadPreviousConfig, []);
+  console.log(previousConfig);
   const [state, _dispatch] = useReducer(contractKitReducer, {
     ...initialState,
-    ...previousConfig,
-    network,
     networks,
     dapp: {
       ...dapp,
       icon: dapp.icon ?? `${dapp.url}/favicon.ico`,
     },
+    ...previousConfig,
   });
 
   const dispatch: Dispatcher = useCallback(

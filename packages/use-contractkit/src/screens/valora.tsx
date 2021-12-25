@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import Loader from 'react-loader-spinner';
-import { AddCeloNetworkButton } from '../components/AddCeloNetworkButton';
+import { SwitchNetworkButton } from '../components/SwitchNetworkButton';
 import { UnsupportedChainIdError, ValoraConnector } from '../connectors';
 
 import { Connector } from '../types';
@@ -38,7 +38,7 @@ export const Valora: React.FC<Props> = ({ onSubmit }: Props) => {
         <p className="tw-text-red-500 tw-pb-4">
           Please connect to the Celo network to continue.
         </p>
-        <AddCeloNetworkButton chainId={network.chainId} />
+        <SwitchNetworkButton chainId={network.chainId} />
       </div>
     );
   }

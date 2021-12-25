@@ -1,6 +1,7 @@
 import { ContractKit } from '@celo/contractkit';
 import { useCallback } from 'react';
 
+import { FALLBACK_NETWORK } from '.';
 import { CONNECTOR_TYPES } from './connectors';
 import {
   localStorageKeys,
@@ -31,19 +32,19 @@ export function useContractKitMethods(
 
         // If the new wallet already has a specific network it's
         // using then we should go with that one.
-        const netId = await initialisedConnector.kit.web3.eth.net.getId();
+        const netId = await initialisedConnector.kit.web3.eth.getChainId();
         const newNetwork = networks.find((n) => netId === n.chainId);
-        if (newNetwork !== network) {
-          dispatch('setNetwork', network);
-        }
+        dispatch('setNetwork', newNetwork || FALLBACK_NETWORK(netId));
 
         // This happens if the network changes on the wallet side
         // and we need to update what network we're storing
         // accordingly.
         initialisedConnector.onNetworkChange?.((chainId) => {
           // TODO: We should probably throw an error if we can't find the new chainId
-          const network = networks.find((n) => n.chainId === chainId);
-          network && dispatch('setNetwork', network);
+          const network =
+            networks.find((n) => n.chainId === chainId) ||
+            FALLBACK_NETWORK(chainId);
+          dispatch('setNetwork', network);
         });
         initialisedConnector.onAddressChange?.((address) => {
           dispatch('setAddress', address);
@@ -61,7 +62,7 @@ export function useContractKitMethods(
         throw e;
       }
     },
-    [dispatch, network, networks]
+    [dispatch, networks]
   );
 
   // This is just to be used to for users to explicitly change

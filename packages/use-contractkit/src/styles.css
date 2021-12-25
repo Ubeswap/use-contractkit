@@ -590,5 +590,6 @@ Connect Modal
   overflow: auto;
 }
 
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
